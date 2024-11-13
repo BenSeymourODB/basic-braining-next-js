@@ -1,6 +1,9 @@
 # basic-braining-next-js
 I wrote one lesson in a "teach yourself to code" guide. Let's see if I can complete it using React and NextJS.
 
+## Skip the background, show me the result!
+Sure thing: [here it is](https://benseymourodb.github.io/basic-braining-next-js/src/index.html).
+
 ## The Background
 A couple of years ago, an acquaintance reached out with a request that went something like this:
 
