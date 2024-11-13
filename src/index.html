@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <style>
+        #app{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .center {
+            margin: auto;
+            text-align: center;
+            }
+        #theText{
+            display: block;
+            border: 3px solid;
+            padding: 10px;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="text/jsx">
+            // Page scripts
+            const changeColors = function(){
+                var text = document.getElementById('theText');
+                var randomColor1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                var randomColor2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                text.style.color = randomColor1;
+                text.style.borderColor = randomColor2;
+            }
+
+            // Components
+            function Header(){
+                return <h1 className="center" id="theText">Basic Braining</h1>
+            }
+            function ColorChangeButton(){
+                return <button type="button" className="center" onClick={changeColors}>Change colors!</button>
+            }
+            function Contents(){
+                return <div className="center">
+                    <Header />
+                    <ColorChangeButton />
+                </div>
+            }
+
+            // Render
+            const app = document.getElementById('app');
+            const root = ReactDOM.createRoot(app);
+            root.render(<Contents />);
+        </script>
+    </body>
+</html>

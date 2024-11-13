@@ -1,0 +1,19 @@
+{
+  "name": "basic-braining-next",
+  "version": "1.0.0",
+  "description": "Can I display text and a button in the middle of a screen?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenSeymourODB/basic-braining-next-js.git"
+  },
+  "author": "BenSeymourODB",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenSeymourODB/basic-braining-next-js/issues"
+  },
+  "homepage": "https://github.com/BenSeymourODB/basic-braining-next-js#readme"
+}
