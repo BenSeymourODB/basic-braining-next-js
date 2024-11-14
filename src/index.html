@@ -10,23 +10,27 @@
         #pageBody{
             width: 100%;
             height: 90%;
+        }
+        .align-center{
             display: flex;
             align-items: center;
         }
-        .align-center {
+        .justify-center {
             margin: auto;
             text-align: center;
             }
-        .align-right {
+        .justify-right {
             margin-left: auto;
-            text-align: center;
+            text-align: right;
+            }
+        .justify-left {
+            margin-right: auto;
+            text-align: left;
             }
         #theText{
             display: block;
             border: 3px solid;
             padding: 10px;
-            color: black;
-            border-color: black;
         }
         #NavFooter{
             width: 100%;
@@ -36,6 +40,9 @@
             border: 3px solid grey;
             display: flex;
             flex-wrap: wrap;
+        }
+        #NavFooterContents{
+            margin-right: 1em;
         }
         </style>
     </head>
@@ -47,10 +54,24 @@
                 return <footer id="NavFooter" className="align-center">{props.children}</footer>
             }
             function TheText(){
-                return <h1 className="align-center" id="theText">Basic Braining</h1>
+                return <div>
+                    <h1 className="justify-center" id="theText">Basic Braining</h1>
+                    <table className="justify-center">
+                      <tbody>
+                       <tr>
+                        <th>Text Color:</th>
+                        <td id="currentTextColor">Not set</td>
+                       </tr>
+                       <tr>
+                        <th>Border Color:</th>
+                        <td id="currentBorderColor">Not set</td>
+                       </tr>
+                      </tbody>
+                    </table>
+                </div>
             }
             function ColorChangeButton({onClick}){
-                return <button type="button" className="align-center" onClick={onClick}>Get some new colors!</button>
+                return <button type="button" className="justify-center" onClick={onClick}>Get some new colors!</button>
             }
             function Contents(){
                 // State
@@ -101,8 +122,8 @@
                 }
 
                 const changeColors = function(){
-                    var text = document.getElementById('theText');
-                    var style = window.getComputedStyle(text);
+                    var centerText = document.getElementById('theText');
+                    var style = window.getComputedStyle(centerText);
                     var textColor = rgbToHex(style.getPropertyValue('color'));
                     var borderColor = rgbToHex(style.getPropertyValue('border-color'));
 
@@ -118,8 +139,13 @@
 
                     var randomColor1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
                     var randomColor2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                    text.style.color = randomColor1;
-                    text.style.borderColor = randomColor2;
+                    centerText.style.color = randomColor1;
+                    centerText.style.borderColor = randomColor2;
+
+                    var textColorDisplayEl = document.getElementById('currentTextColor');
+                    textColorDisplayEl.innerHTML = randomColor1;
+                    var borderColorDisplayEl = document.getElementById('currentBorderColor');
+                    borderColorDisplayEl.innerHTML = randomColor2;
 
                     updateSelector([
                         ...newHistory,
@@ -127,19 +153,19 @@
                         newHistory.length - 1);
                 }
 
-                return <div className="align-center">
-                    <div id="pageBody">
-                        <div className="align-center">
+                return <div className="justify-center">
+                    <div id="pageBody" className="align-center">
+                        <div className="justify-center">
                             <TheText />
                             <ColorChangeButton onClick={() => {changeColors();}} />
                         </div>
                     </div>
                     <NavFooter>
-                        <div className="align-right">
-                        <label htmlFor="pastColorSelector">Color history</label>
-                        <select name="pastColorSelector" id="pastColorSelector">
-                            <option>None</option>
-                        </select>
+                        <div id="NavFooterContents" className="justify-right">
+                            <label htmlFor="pastColorSelector"><b>Color history: </b></label>
+                            <select name="pastColorSelector" id="pastColorSelector">
+                                <option>None</option>
+                            </select>
                         </div>
                     </NavFooter>
                 </div>
