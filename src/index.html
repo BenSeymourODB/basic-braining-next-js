@@ -5,45 +5,143 @@
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
         <style>
         #app{
+            display: block;
+        }
+        #pageBody{
             width: 100%;
-            height: 100%;
+            height: 90%;
             display: flex;
             align-items: center;
         }
-        .center {
+        .align-center {
             margin: auto;
+            text-align: center;
+            }
+        .align-right {
+            margin-left: auto;
             text-align: center;
             }
         #theText{
             display: block;
             border: 3px solid;
             padding: 10px;
+            color: black;
+            border-color: black;
+        }
+        #NavFooter{
+            width: 100%;
+            max-height: 10%;
+            min-height: 4rem;
+            background-color: white;
+            border: 3px solid grey;
+            display: flex;
+            flex-wrap: wrap;
         }
         </style>
     </head>
     <body>
         <div id="app"></div>
         <script type="text/jsx">
-            // Page scripts
-            const changeColors = function(){
-                var text = document.getElementById('theText');
-                var randomColor1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                var randomColor2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                text.style.color = randomColor1;
-                text.style.borderColor = randomColor2;
-            }
-
             // Components
-            function Header(){
-                return <h1 className="center" id="theText">Basic Braining</h1>
+            function NavFooter(props){
+                return <footer id="NavFooter" className="align-center">{props.children}</footer>
             }
-            function ColorChangeButton(){
-                return <button type="button" className="center" onClick={changeColors}>Change colors!</button>
+            function TheText(){
+                return <h1 className="align-center" id="theText">Basic Braining</h1>
+            }
+            function ColorChangeButton({onClick}){
+                return <button type="button" className="align-center" onClick={onClick}>Get some new colors!</button>
             }
             function Contents(){
-                return <div className="center">
-                    <Header />
-                    <ColorChangeButton />
+                // State
+                const [colorHistory, setColorHistory] = React.useState([]);
+
+                // Page scripts
+                const updateSelector = function(colorHistoryArray, selectIndex){
+                    if(colorHistoryArray == null){
+                        colorHistoryArray = colorHistory;
+                    }
+                    if(colorHistoryArray.length === 0){
+                        return;
+                    }
+
+                    var selector = document.getElementById('pastColorSelector');
+
+                    var i = 0;
+                    var options = colorHistoryArray.map((h) => {
+                        var opt = document.createElement('option');
+                        opt.value = i;
+                        opt.innerHTML = h.textColor + ", " + h.borderColor;
+                        opt.disabled = true;
+                        i++;
+                        return opt;
+                    });
+                    selector.replaceChildren(...options);
+                    selector.value = selectIndex;
+                }
+
+                //  Credit to Tim Down at https://stackoverflow.com/a/13070569
+                const rgbToHex = function(rgb) {
+                    function componentFromStr(numStr, percent) {
+                        var num = Math.max(0, parseInt(numStr, 10));
+                        return percent ?
+                            Math.floor(255 * Math.min(100, num) / 100) : Math.min(255, num);
+                    }
+
+                    var rgbRegex = /^rgb\(\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*\)$/;
+                    var result, r, g, b, hex = "";
+                    if ( (result = rgbRegex.exec(rgb)) ) {
+                        r = componentFromStr(result[1], result[2]);
+                        g = componentFromStr(result[3], result[4]);
+                        b = componentFromStr(result[5], result[6]);
+                
+                        hex = "#" + (0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                    }
+                    return hex;
+                }
+
+                const changeColors = function(){
+                    var text = document.getElementById('theText');
+                    var style = window.getComputedStyle(text);
+                    var textColor = rgbToHex(style.getPropertyValue('color'));
+                    var borderColor = rgbToHex(style.getPropertyValue('border-color'));
+
+                    var newHistory = [
+                        ...colorHistory,
+                        {textColor: textColor, borderColor: borderColor}
+                    ];
+                    setColorHistory(newHistory);
+
+                    var footer = document.getElementById('NavFooter');
+                    footer.firstElementChild.style.color = textColor;
+                    footer.style.borderColor = borderColor;
+
+                    var randomColor1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    var randomColor2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    text.style.color = randomColor1;
+                    text.style.borderColor = randomColor2;
+
+                    updateSelector([
+                        ...newHistory,
+                        {textColor: randomColor1, borderColor: randomColor2}],
+                        newHistory.length - 1);
+                }
+
+                return <div className="align-center">
+                    <div id="pageBody">
+                        <div className="align-center">
+                            <TheText />
+                            <ColorChangeButton onClick={() => {changeColors();}} />
+                        </div>
+                    </div>
+                    <NavFooter>
+                        <div className="align-right">
+                        <label htmlFor="pastColorSelector">Color history</label>
+                        <select name="pastColorSelector" id="pastColorSelector">
+                            <option>None</option>
+                        </select>
+                        </div>
+                    </NavFooter>
                 </div>
             }
 

@@ -1,15 +1,25 @@
-import http from "http";
-import fs from "fs";
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
-const PORT=8080; 
+const hostname = '127.0.0.1';
+const port = 3000;
 
-fs.readFile('./index.html', function (err, html) {
-
-    if (err) throw err;    
-
-    http.createServer(function(request, response) {  
-        response.writeHeader(200, {"Content-Type": "text/html"});  
-        response.write(html);  
-        response.end();  
-    }).listen(PORT);
+http.createServer((req, res) => {
+  if (req.url === '/') {
+    fs.readFile(path.join(__dirname, 'src/index.html'), (err, data) => {
+      if (err) {
+        res.writeHead(500);
+        res.end('Error loading file');
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(data);
+      }
+    });
+  } else {
+    res.writeHead(404);
+    res.end('Not Found');
+  }
+}).listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
 });
