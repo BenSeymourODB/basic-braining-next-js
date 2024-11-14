@@ -3,6 +3,7 @@
         <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=history" />
         <style>
         #app{
             display: block;
@@ -161,8 +162,13 @@
                         </div>
                     </div>
                     <NavFooter>
-                        <div id="NavFooterContents" className="justify-right">
-                            <label htmlFor="pastColorSelector"><b>Color history: </b></label>
+                        <div id="NavFooterContents" className="justify-right align-center">
+                            <label htmlFor="pastColorSelector" className="align-center">
+                                <span class="material-symbols-outlined">
+                                    history
+                                </span>
+                                <b>Color history: </b>
+                            </label>
                             <select name="pastColorSelector" id="pastColorSelector">
                                 <option>None</option>
                             </select>
